@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Governança de Drivers Ofensores</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body { 
+      font-family: Arial, sans-serif; 
+      background: #f4f4f9; 
+      padding: 20px; 
+      margin: 0;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    .container { 
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 12px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    }
+
+    input, button, select { 
+      width: 100%; 
+      padding: 10px; 
+      margin: 8px 0; 
+      border-radius: 8px; 
+      border: 1px solid #ccc; 
+    }
+
+    button { 
+      background: #FF5722;
+      color: white; 
+      cursor: pointer; 
+      font-weight: bold;
+      border: none;
+    }
+
+    button:hover { 
+      background: #e64a19; 
+    }
+
+    .result-box { 
+      margin-top: 20px; 
+      padding: 15px; 
+      background: #ffe7dd; 
+      border-left: 4px solid #FF5722; 
+      border-radius: 8px; 
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+    }
+
+    th { 
+      background: #FF5722; 
+      color: white; 
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    tr:nth-child(even) { 
+      background: #fff3eb; 
+    }
+
+    /* coluna Responsável escondida por padrão */
+    .col-responsavel {
+      display: none;
+    }
+
+    /* login */
+    #login-box {
+      text-align: left;
+    }
+
+    #login-box h2 {
+      margin-top: 0;
+    }
+
+    .error-msg {
+      color: #d32f2f;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- LOGIN / SENHA -->
+    <div id="login-box">
+      <h2>Governança de Drivers Ofensores</h2>
+      <p>🔒 Área restrita à equipe CIA</p>
+      <input type="password" id="passwordInput" placeholder="Digite a senha" />
+      <button id="btnLogin">Entrar</button>
+      <p id="loginError" class="error-msg"></p>
+    </div>
+
+    <!-- SISTEMA (fica oculto até digitar a senha correta) -->
+    <div id="app" style="display:none;">
+
+      <input id="driverId" type="text" placeholder="Digite o ID ou nome completo do driver..." />
+      <button onclick="buscarDriver()">Buscar</button>
+
+      <div id="resultado" class="result-box" style="display:none"></div>
+
+      <hr>
+      <h3>Registrar informações manualmente</h3>
+
+      <input id="newId" type="text" placeholder="ID do driver (somente números)" />
+      <input id="newNome" type="text" placeholder="Nome do driver" />
+
+      <select id="newMonitorT1">
+        <option value="">Monitor T1</option>
+        <option>Ana Clara Cardoso</option>
+        <option>Chauane Silva</option>
+        <option>Claudinei Braga</option>
+        <option>Diego Santos</option>
+        <option>Matheus Paz</option>
+        <option>Layane Mendes</option>
+        <option>Samara Batista</option>
+        <option>Sandrine Alves</option>
+        <option>Scarlet Pinto</option>
+      </select>
+
+      <select id="newMonitorT2">
+        <option value="">Monitor T2</option>
+        <option>Ana Flávia</option>
+        <option>Dulciléia Ferreira</option>
+        <option>Glaucia Fidelis</option>
+        <option>Guilherme Bahia</option>
+        <option>Jéssica Silva</option>
+        <option>Juliana Rodrigues</option>
+        <option>Liliane Siqueira</option>
+        <option>Luiz Silva</option>
+        <option>Matheus Santos</option>
+        <option>Rafaela Leroy</option>
+        <option>Ramon Gontijo</option>
+        <option>Thiago Britto</option>
+      </select>
+
+      <select id="newHub">
+        <option value="">HUB</option>
+        <option>HUB-LMS-02</option><option>HUB-LRO-01</option><option>HUB-LMT-02</option><option>HUB-LMG-38</option><option>HUB-LMG-23</option><option>HUB-LMG-11</option><option>HUB-LMG-44</option><option>HUB-LMG-50</option><option>HUB-LMG-15</option><option>HUB-LMG-21</option><option>HUB-LMG-43</option><option>HUB-LPA-03</option><option>HUB-LTO-02</option><option>HUB-LGO-05</option><option>HUB-LMS-04</option><option>HUB-LGO-04</option><option>HUB-LGO-03</option><option>HUB-LGO-02</option><option>HUB-LGO-06</option><option>HUB-LDF-01</option><option>HUB-LDF-04</option><option>HUB-LDF-06</option><option>HUB-LDF-05</option><option>HUB-LMG-19</option><option>HUB-LMG-12</option><option>HUB-LMG-02</option><option>HUB-LMG-40</option><option>HUB-LMG-09</option><option>HUB-LMG-62</option><option>HUB-LMG-36</option><option>HUB-LMG-14</option><option>HUB-LAM-02</option><option>HUB-LMG-45</option><option>HUB-LMG-56</option><option>HUB-LMG-59</option><option>HUB-LMG-27</option><option>HUB-LMG-49</option><option>HUB-LAM-01</option><option>HUB-LMG-05</option><option>HUB-LMG-20</option><option>HUB-LMG-13</option>
+      </select>
+
+      <input id="newImpacto" type="text" placeholder="Impacto no DS HUB (ex.: 0,99%)" />
+
+      <input id="newComentarios" type="text" placeholder="Comentários (ex.: Sem retorno, comportamental)" />
+      <input id="newObservacao" type="text" placeholder="Observação (ex.: alinhado com Fleet, combinado retorno em 2 dias)" />
+      <input id="newStatus" type="text" placeholder="Status Governança (ex.: Em acompanhamento / Encerrado / Escalado)" />
+
+      <input id="newResponsavel" type="text" placeholder="Responsável por adicionar as informações (ex.: Henrique Carvalho)" />
+
+      <select id="newNotificacao">
+        <option value="">Fleet foi notificado? (Sim ou Não)</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <select id="newCarregou">
+        <option value="">Carregou após notificação? (Sim ou Não)</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <select id="newTreinamento">
+        <option value="">Treinamento/Reciclagem realizado? (Sim ou Não)</option>
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <button onclick="adicionarDriver()">Adicionar Driver</button>
+      <div id="msgAdd"></div>
+
+      <h3>Exportar dados</h3>
+      <button onclick="exportarCSV()">Exportar CSV</button>
+
+      <hr>
+
+      <h3>Histórico Completo</h3>
+
+      <input id="filtroHistorico" type="text" placeholder="Filtrar histórico..." onkeyup="filtrarHistorico()" />
+
+      <div class="table-wrapper">
+        <table id="historicoTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Data</th>
+              <th>ID</th>
+              <th>Nome</th>
+              <th class="col-responsavel">Responsável</th>
+              <th>Monitor T1</th>
+              <th>Monitor T2</th>
+              <th>HUB</th>
+              <th>Impacto</th>
+              <th>Status</th>
+              <th>Notificação</th>
+              <th>Carregou</th>
+              <th>Treinamento</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+    </div> <!-- fim #app -->
+  </div> <!-- fim .container -->
+
+  <script>
+    // =========================
+    // BLOQUEIO POR SENHA
+    // =========================
+
+    const PASSWORD = "CIA2024"; // troque aqui pela senha que quiser
+
+    function mostrarSistema() {
+      document.getElementById("login-box").style.display = "none";
+      document.getElementById("app").style.display = "block";
+    }
+
+    function tentarLogin() {
+      const input = document.getElementById("passwordInput");
+      const erro = document.getElementById("loginError");
+
+      if (input.value === PASSWORD) {
+        erro.textContent = "";
+        mostrarSistema();
+      } else {
+        erro.textContent = "Senha incorreta.";
+      }
+    }
+
+    document.getElementById("btnLogin").addEventListener("click", tentarLogin);
+
+    document.getElementById("passwordInput").addEventListener("keyup", function(e) {
+      if (e.key === "Enter") {
+        tentarLogin();
+      }
+    });
+
+    // =========================
+    // LÓGICA DA GOVERNANÇA
+    // =========================
+
+    const driversDB = [];
+
+    function atualizarHistorico() {
+      const tbody = document.querySelector("#historicoTable tbody");
+      tbody.innerHTML = "";
+
+      driversDB.forEach((d, i) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${d.data}</td>
+          <td>${d.id}</td>
+          <td>${d.nome}</td>
+          <td class="col-responsavel">${d.responsavel}</td>
+          <td>${d.monitorT1}</td>
+          <td>${d.monitorT2}</td>
+          <td>${d.hub}</td>
+          <td>${d.impacto}</td>
+          <td>${d.status}</td>
+          <td>${d.notificacao}</td>
+          <td>${d.carregou}</td>
+          <td>${d.treinamento}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function atualizarVisibilidadeResponsavelPorFiltro(termo) {
+      const termoLimpo = termo.trim().toLowerCase();
+      let mostrar = false;
+
+      if (termoLimpo !== "") {
+        // mostra se o filtro bater exatamente com ID ou nome completo
+        mostrar = driversDB.some(d =>
+          d.id.toLowerCase() === termoLimpo ||
+          d.nome.toLowerCase() === termoLimpo
+        );
+      }
+
+      document.querySelectorAll(".col-responsavel").forEach(el => {
+        el.style.display = mostrar ? "table-cell" : "none";
+      });
+    }
+
+    function filtrarHistorico() {
+      const termo = document.getElementById("filtroHistorico").value.toLowerCase();
+      const linhas = document.querySelectorAll("#historicoTable tbody tr");
+
+      linhas.forEach(l => {
+        l.style.display = l.innerText.toLowerCase().includes(termo) ? "" : "none";
+      });
+
+      atualizarVisibilidadeResponsavelPorFiltro(termo);
+    }
+
+    function buscarDriver() {
+      const termo = document.getElementById("driverId").value.trim().toLowerCase();
+      const box = document.getElementById("resultado");
+
+      const registros = driversDB.filter(d =>
+        d.id.toLowerCase() === termo ||
+        d.nome.toLowerCase() === termo
+      );
+
+      if (!registros.length) {
+        box.style.display = "block";
+        box.innerHTML = "<strong>Driver não encontrado.</strong>";
+        return;
+      }
+
+      const total = registros.length;
+      const impactos = registros.map(r => r.impacto).join(", ");
+      const ultimo = registros[registros.length - 1];
+
+      atualizarVisibilidadeResponsavelPorFiltro(termo);
+
+      box.style.display = "block";
+      box.innerHTML = `
+        <h4>Resumo</h4>
+        <p><strong>Total de registros:</strong> ${total}</p>
+        <p><strong>Impactos registrados:</strong> ${impactos}</p>
+        <p><strong>Último impacto:</strong> ${ultimo.impacto}</p>
+        <hr>
+        <h4>Último Registro</h4>
+        <p><strong>Data:</strong> ${ultimo.data}</p>
+        <p><strong>ID:</strong> ${ultimo.id}</p>
+        <p><strong>Nome:</strong> ${ultimo.nome}</p>
+        <p><strong>Responsável:</strong> ${ultimo.responsavel}</p>
+        <p><strong>Monitor T1:</strong> ${ultimo.monitorT1}</p>
+        <p><strong>Monitor T2:</strong> ${ultimo.monitorT2}</p>
+        <p><strong>HUB:</strong> ${ultimo.hub}</p>
+        <p><strong>Status:</strong> ${ultimo.status}</p>
+        <p><strong>Notificação:</strong> ${ultimo.notificacao}</p>
+        <p><strong>Carregou?</strong> ${ultimo.carregou}</p>
+        <p><strong>Treinamento:</strong> ${ultimo.treinamento}</p>
+        <p><strong>Comentários:</strong> ${ultimo.comentarios}</p>
+        <p><strong>Observação:</strong> ${ultimo.observacao}</p>
+      `;
+    }
+
+    function adicionarDriver() {
+      const novo = {
+        id: document.getElementById("newId").value.trim(),
+        nome: document.getElementById("newNome").value.trim(),
+        monitorT1: document.getElementById("newMonitorT1").value,
+        monitorT2: document.getElementById("newMonitorT2").value,
+        hub: document.getElementById("newHub").value,
+        impacto: document.getElementById("newImpacto").value.trim(),
+        comentarios: document.getElementById("newComentarios").value.trim(),
+        observacao: document.getElementById("newObservacao").value.trim(),
+        status: document.getElementById("newStatus").value.trim(),
+        responsavel: document.getElementById("newResponsavel").value.trim(),
+        notificacao: document.getElementById("newNotificacao").value,
+        carregou: document.getElementById("newCarregou").value,
+        treinamento: document.getElementById("newTreinamento").value.trim(),
+        data: new Date().toLocaleString("pt-BR")
+      };
+
+      if (!novo.id) {
+        document.getElementById("msgAdd").innerHTML = "<p style='color:red'>ID obrigatório.</p>";
+        return;
+      }
+
+      driversDB.push(novo);
+      atualizarHistorico();
+
+      [
+        "newId","newNome","newMonitorT1","newMonitorT2","newHub","newImpacto",
+        "newComentarios","newObservacao","newStatus","newResponsavel",
+        "newNotificacao","newCarregou","newTreinamento"
+      ].forEach(id => document.getElementById(id).value = "");
+
+      document.getElementById("msgAdd").innerHTML = "<p style='color:green'>Driver registrado!</p>";
+    }
+
+    function exportarCSV() {
+      let csv = "data,id,nome,responsavel,monitorT1,monitorT2,hub,impacto,comentarios,observacao,status,notificacao,carregou,treinamento\n";
+
+      driversDB.forEach(d => {
+        csv += `${d.data},${d.id},${d.nome},${d.responsavel},${d.monitorT1},${d.monitorT2},${d.hub},${d.impacto},${d.comentarios},${d.observacao},${d.status},${d.notificacao},${d.carregou},${d.treinamento}\n`;
+      });
+
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "governanca_drivers.csv";
+      a.click();
+    }
+  </script>
+</body>
+</html>
+
