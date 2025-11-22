@@ -278,12 +278,13 @@
 function salvarRegistroRemoto(registro) {
   fetch(API_URL, {
     method: 'POST',
-    mode: 'no-cors',              // evita problema de CORS
+    mode: 'no-cors',              // importante pra não quebrar no GitHub Pages
     body: JSON.stringify(registro)
   }).catch(err => {
     console.error('Erro ao enviar para o Sheets:', err);
   });
 }
+
 
 
     // =========================
@@ -444,6 +445,7 @@ function salvarRegistroRemoto(registro) {
 
 </body>
 </html>
+
 
 
 
