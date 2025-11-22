@@ -436,17 +436,25 @@
       driversDB.push(novo);
       atualizarHistorico();
 
-      // salva na planilha
-      salvarRegistroRemoto(novo);
-
-      [
-        "newId","newNome","newMonitorT1","newMonitorT2","newHub","newImpacto",
-        "newComentarios","newObservacao","newStatus","newResponsavel",
-        "newNotificacao","newCarregou","newTreinamento"
-      ].forEach(id => document.getElementById(id).value = "");
-
-      document.getElementById("msgAdd").innerHTML = "<p style='color:green'>Driver registrado!</p>";
+     function salvarRegistroRemoto(registro) {
+  fetch(API_URL, {
+    method: 'POST',
+    // sem headers pra evitar problema de CORS
+    body: JSON.stringify(registro)
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.status !== 'ok') {
+      console.error('Falha ao salvar no Sheets:', res);
+      alert('Aviso: problema ao salvar no histórico central.');
     }
+  })
+  .catch(err => {
+    console.error('Erro ao salvar no Sheets:', err);
+    alert('Erro ao salvar no Sheets. Veja o console (F12 → Console).');
+  });
+}
+
 
     function exportarCSV() {
       let csv = "data,id,nome,responsavel,monitorT1,monitorT2,hub,impacto,comentarios,observacao,status,notificacao,carregou,treinamento\n";
@@ -465,4 +473,5 @@
   </script>
 </body>
 </html>
+
 
