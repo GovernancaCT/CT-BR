@@ -84,7 +84,7 @@
       background: #fff3eb; 
     }
 
-    /* coluna Responsável escondida por padrão */
+    /* coluna responsavel escondida por padrão */
     .col-responsavel {
       display: none;
     }
@@ -164,9 +164,9 @@
         <option>HUB-LMS-02</option><option>HUB-LRO-01</option><option>HUB-LMT-02</option><option>HUB-LMG-38</option><option>HUB-LMG-23</option><option>HUB-LMG-11</option><option>HUB-LMG-44</option><option>HUB-LMG-50</option><option>HUB-LMG-15</option><option>HUB-LMG-21</option><option>HUB-LMG-43</option><option>HUB-LPA-03</option><option>HUB-LTO-02</option><option>HUB-LGO-05</option><option>HUB-LMS-04</option><option>HUB-LGO-04</option><option>HUB-LGO-03</option><option>HUB-LGO-02</option><option>HUB-LGO-06</option><option>HUB-LDF-01</option><option>HUB-LDF-04</option><option>HUB-LDF-06</option><option>HUB-LDF-05</option><option>HUB-LMG-19</option><option>HUB-LMG-12</option><option>HUB-LMG-02</option><option>HUB-LMG-40</option><option>HUB-LMG-09</option><option>HUB-LMG-62</option><option>HUB-LMG-36</option><option>HUB-LMG-14</option><option>HUB-LAM-02</option><option>HUB-LMG-45</option><option>HUB-LMG-56</option><option>HUB-LMG-59</option><option>HUB-LMG-27</option><option>HUB-LMG-49</option><option>HUB-LAM-01</option><option>HUB-LMG-05</option><option>HUB-LMG-20</option><option>HUB-LMG-13</option>
       </select>
 
-      <input id="newImpacto" type="text" placeholder="Impacto no DS HUB (ex.: 0,99%)" />
+      <input id="newImpacto" type="text" placeholder="Impacto no DS HUB (ex.: -2 pts DS / 30 paradas backlog)" />
 
-      <input id="newComentarios" type="text" placeholder="Comentários (ex.: Sem retorno, comportamental)" />
+      <input id="newComentarios" type="text" placeholder="Comentários (ex.: recusou carga, backlog elevado, comportamento no hub)" />
       <input id="newObservacao" type="text" placeholder="Observação (ex.: alinhado com Fleet, combinado retorno em 2 dias)" />
       <input id="newStatus" type="text" placeholder="Status Governança (ex.: Em acompanhamento / Encerrado / Escalado)" />
 
@@ -225,19 +225,29 @@
         </table>
       </div>
 
-    </div> <!-- fim #app -->
-  </div> <!-- fim .container -->
+    </div>
+  </div>
 
   <script>
     // =========================
-    // BLOQUEIO POR SENHA
+    // CONFIGURAÇÕES
     // =========================
 
-    const PASSWORD = "CIA2024"; // troque aqui pela senha que quiser
+    const API_URL = 'https://script.google.com/a/macros/shopee.com/s/AKfycbzBH8d3g592pQOoyT5hIbut3jubVmpbJ_qxHZ6S42yJx3qBDCEauqwZ239-snDTlSdT/exec';
+    const PASSWORD = "CIA2024"; // senha simples da tela
+
+    const driversDB = [];
+
+    // =========================
+    // LOGIN / SENHA
+    // =========================
 
     function mostrarSistema() {
       document.getElementById("login-box").style.display = "none";
       document.getElementById("app").style.display = "block";
+
+      // carrega histórico da planilha quando entrar
+      carregarHistoricoRemoto();
     }
 
     function tentarLogin() {
@@ -261,10 +271,44 @@
     });
 
     // =========================
-    // LÓGICA DA GOVERNANÇA
+    // INTEGRAÇÃO COM GOOGLE SHEETS
     // =========================
 
-    const driversDB = [];
+    function carregarHistoricoRemoto() {
+      fetch(API_URL)
+        .then(r => r.json())
+        .then(registros => {
+          driversDB.length = 0; // limpa array
+          registros.forEach(r => driversDB.push(r));
+          atualizarHistorico();
+        })
+        .catch(err => {
+          console.error('Erro ao carregar histórico remoto:', err);
+        });
+    }
+
+    function salvarRegistroRemoto(registro) {
+      fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registro)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.status !== 'ok') {
+          console.error('Falha ao salvar no Sheets:', res);
+        }
+      })
+      .catch(err => {
+        console.error('Erro ao salvar no Sheets:', err);
+      });
+    }
+
+    // =========================
+    // LÓGICA DA GOVERNANÇA
+    // =========================
 
     function atualizarHistorico() {
       const tbody = document.querySelector("#historicoTable tbody");
@@ -298,10 +342,9 @@
       let mostrar = false;
 
       if (termoLimpo !== "") {
-        // mostra se o filtro bater exatamente com ID ou nome completo
         mostrar = driversDB.some(d =>
-          d.id.toLowerCase() === termoLimpo ||
-          d.nome.toLowerCase() === termoLimpo
+          String(d.id).toLowerCase() === termoLimpo ||
+          String(d.nome).toLowerCase() === termoLimpo
         );
       }
 
@@ -326,8 +369,8 @@
       const box = document.getElementById("resultado");
 
       const registros = driversDB.filter(d =>
-        d.id.toLowerCase() === termo ||
-        d.nome.toLowerCase() === termo
+        String(d.id).toLowerCase() === termo ||
+        String(d.nome).toLowerCase() === termo
       );
 
       if (!registros.length) {
@@ -389,8 +432,12 @@
         return;
       }
 
+      // adiciona local
       driversDB.push(novo);
       atualizarHistorico();
+
+      // salva na planilha
+      salvarRegistroRemoto(novo);
 
       [
         "newId","newNome","newMonitorT1","newMonitorT2","newHub","newImpacto",
@@ -418,4 +465,3 @@
   </script>
 </body>
 </html>
-
