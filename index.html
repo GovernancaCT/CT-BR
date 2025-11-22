@@ -275,23 +275,16 @@
         });
     }
 
-    function salvarRegistroRemoto(registro) {
-      fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify(registro) // sem headers pra evitar CORS
-      })
-      .then(r => r.json())
-      .then(res => {
-        if (res.status !== 'ok') {
-          console.error('Falha ao salvar no Sheets:', res);
-          alert('Aviso: problema ao salvar no histórico central.');
-        }
-      })
-      .catch(err => {
-        console.error('Erro ao salvar no Sheets:', err);
-        alert('Erro ao salvar no Sheets. Veja o console (F12 → Console).');
-      });
-    }
+function salvarRegistroRemoto(registro) {
+  fetch(API_URL, {
+    method: 'POST',
+    mode: 'no-cors',              // evita problema de CORS
+    body: JSON.stringify(registro)
+  }).catch(err => {
+    console.error('Erro ao enviar para o Sheets:', err);
+  });
+}
+
 
     // =========================
     // LÓGICA DA GOVERNANÇA
@@ -451,6 +444,7 @@
 
 </body>
 </html>
+
 
 
 
