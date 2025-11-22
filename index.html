@@ -228,7 +228,7 @@
     // =========================
     // CONFIGURAÇÕES
     // =========================
-    const API_URL = const API_URL = 'https://script.google.com/a/macros/shopee.com/s/AKfycbzBH8d3g592pQOoyT5hIbut3jubVmpbJ_qxHZ6S42yJx3qBDCEauqwZ239-snDTlSdT/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzBH8d3g592pQOoyT5hIbut3jubVmpbJ_qxHZ6S42yJx3qBDCEauqwZ239-snDTlSdT/exec';
     const PASSWORD = "CIA2024";
 
     const driversDB = [];
@@ -275,17 +275,15 @@
         });
     }
 
-function salvarRegistroRemoto(registro) {
-  fetch(API_URL, {
-    method: 'POST',
-    mode: 'no-cors',              // importante pra não quebrar no GitHub Pages
-    body: JSON.stringify(registro)
-  }).catch(err => {
-    console.error('Erro ao enviar para o Sheets:', err);
-  });
-}
-
-
+    function salvarRegistroRemoto(registro) {
+      fetch(API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(registro)
+      }).catch(err => {
+        console.error('Erro ao enviar para o Sheets:', err);
+      });
+    }
 
     // =========================
     // LÓGICA DA GOVERNANÇA
@@ -442,12 +440,3 @@ function salvarRegistroRemoto(registro) {
   </script>
 </body>
 </html>
-
-</body>
-</html>
-
-
-
-
-
-
