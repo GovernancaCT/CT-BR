@@ -228,7 +228,7 @@
     // =========================
     // CONFIGURAÇÕES
     // =========================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzhb3uhYxEBhZNyIR6cZUsM629XaxUrCSo4jiDtOqOTXi54JtaCsDMcSk_WCXSfeA/exec';
+    const API_URL = 'https://governacact.henrique-teixeira.workers.dev';
     const PASSWORD = "CIA2024";
 
     const driversDB = [];
@@ -260,7 +260,7 @@
     });
 
     // =========================
-    // INTEGRAÇÃO COM GOOGLE SHEETS
+    // INTEGRAÇÃO COM API (Worker → Apps Script → Sheets)
     // =========================
     function carregarHistoricoRemoto() {
       fetch(API_URL)
@@ -278,10 +278,15 @@
     function salvarRegistroRemoto(registro) {
       fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors',
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(registro)
-      }).catch(err => {
-        console.error('Erro ao enviar para o Sheets:', err);
+      })
+      .then(r => r.json())
+      .then(res => {
+        console.log('Registro salvo na API:', res);
+      })
+      .catch(err => {
+        console.error('Erro ao enviar para a API:', err);
       });
     }
 
@@ -411,7 +416,7 @@
       driversDB.push(novo);
       atualizarHistorico();
 
-      // salva na planilha
+      // salva na planilha via API
       salvarRegistroRemoto(novo);
 
       [
@@ -440,6 +445,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
