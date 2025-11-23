@@ -4,57 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Governança de Drivers Ofensores</title>
-
   <style>
     * {
       box-sizing: border-box;
     }
 
-    body { 
-      font-family: Arial, sans-serif; 
-      background: #f4f4f9; 
-      padding: 20px; 
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      padding: 20px;
       margin: 0;
       width: 100%;
       overflow-x: hidden;
     }
 
-    .container { 
+    .container {
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      background: #fff; 
-      padding: 20px; 
-      border-radius: 12px; 
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    input, button, select { 
-      width: 100%; 
-      padding: 10px; 
-      margin: 8px 0; 
-      border-radius: 8px; 
-      border: 1px solid #ccc; 
+    input, button, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
-    button { 
+    button {
       background: #FF5722;
-      color: white; 
-      cursor: pointer; 
+      color: white;
+      cursor: pointer;
       font-weight: bold;
       border: none;
     }
 
-    button:hover { 
-      background: #e64a19; 
+    button:hover {
+      background: #e64a19;
     }
 
-    .result-box { 
-      margin-top: 20px; 
-      padding: 15px; 
-      background: #ffe7dd; 
-      border-left: 4px solid #FF5722; 
-      border-radius: 8px; 
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ffe7dd;
+      border-left: 4px solid #FF5722;
+      border-radius: 8px;
     }
 
     .table-wrapper {
@@ -63,14 +62,14 @@
       margin-top: 20px;
     }
 
-    table { 
-      width: 100%; 
-      border-collapse: collapse; 
+    table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    th { 
-      background: #FF5722; 
-      color: white; 
+    th {
+      background: #FF5722;
+      color: white;
       padding: 10px;
       border: 1px solid #ccc;
     }
@@ -80,8 +79,8 @@
       border: 1px solid #ccc;
     }
 
-    tr:nth-child(even) { 
-      background: #fff3eb; 
+    tr:nth-child(even) {
+      background: #fff3eb;
     }
 
     .col-responsavel {
@@ -102,7 +101,6 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <!-- LOGIN / SENHA -->
@@ -159,7 +157,47 @@
 
       <select id="newHub">
         <option value="">HUB</option>
-        <option>HUB-LMS-02</option><option>HUB-LRO-01</option><option>HUB-LMT-02</option><option>HUB-LMG-38</option><option>HUB-LMG-23</option><option>HUB-LMG-11</option><option>HUB-LMG-44</option><option>HUB-LMG-50</option><option>HUB-LMG-15</option><option>HUB-LMG-21</option><option>HUB-LMG-43</option><option>HUB-LPA-03</option><option>HUB-LTO-02</option><option>HUB-LGO-05</option><option>HUB-LMS-04</option><option>HUB-LGO-04</option><option>HUB-LGO-03</option><option>HUB-LGO-02</option><option>HUB-LGO-06</option><option>HUB-LDF-01</option><option>HUB-LDF-04</option><option>HUB-LDF-06</option><option>HUB-LDF-05</option><option>HUB-LMG-19</option><option>HUB-LMG-12</option><option>HUB-LMG-02</option><option>HUB-LMG-40</option><option>HUB-LMG-09</option><option>HUB-LMG-62</option><option>HUB-LMG-36</option><option>HUB-LMG-14</option><option>HUB-LAM-02</option><option>HUB-LMG-45</option><option>HUB-LMG-56</option><option>HUB-LMG-59</option><option>HUB-LMG-27</option><option>HUB-LMG-49</option><option>HUB-LAM-01</option><option>HUB-LMG-05</option><option>HUB-LMG-20</option><option>HUB-LMG-13</option>
+        <option>HUB-LMS-02</option>
+        <option>HUB-LRO-01</option>
+        <option>HUB-LMT-02</option>
+        <option>HUB-LMG-38</option>
+        <option>HUB-LMG-23</option>
+        <option>HUB-LMG-11</option>
+        <option>HUB-LMG-44</option>
+        <option>HUB-LMG-50</option>
+        <option>HUB-LMG-15</option>
+        <option>HUB-LMG-21</option>
+        <option>HUB-LMG-43</option>
+        <option>HUB-LPA-03</option>
+        <option>HUB-LTO-02</option>
+        <option>HUB-LGO-05</option>
+        <option>HUB-LMS-04</option>
+        <option>HUB-LGO-04</option>
+        <option>HUB-LGO-03</option>
+        <option>HUB-LGO-02</option>
+        <option>HUB-LGO-06</option>
+        <option>HUB-LDF-01</option>
+        <option>HUB-LDF-04</option>
+        <option>HUB-LDF-06</option>
+        <option>HUB-LDF-05</option>
+        <option>HUB-LMG-19</option>
+        <option>HUB-LMG-12</option>
+        <option>HUB-LMG-02</option>
+        <option>HUB-LMG-40</option>
+        <option>HUB-LMG-09</option>
+        <option>HUB-LMG-62</option>
+        <option>HUB-LMG-36</option>
+        <option>HUB-LMG-14</option>
+        <option>HUB-LAM-02</option>
+        <option>HUB-LMG-45</option>
+        <option>HUB-LMG-56</option>
+        <option>HUB-LMG-59</option>
+        <option>HUB-LMG-27</option>
+        <option>HUB-LMG-49</option>
+        <option>HUB-LAM-01</option>
+        <option>HUB-LMG-05</option>
+        <option>HUB-LMG-20</option>
+        <option>HUB-LMG-13</option>
       </select>
 
       <input id="newImpacto" type="text" placeholder="Impacto no DS HUB (ex.: 0,99% DS)" />
@@ -230,6 +268,7 @@
     // =========================
     const API_URL = 'https://governacact.henrique-teixeira.workers.dev';
     const PASSWORD = "CIA2024";
+    const SECRET = "CIA-KEY-2024-HENRIQUE";
 
     const driversDB = [];
 
@@ -276,6 +315,9 @@
     }
 
     function salvarRegistroRemoto(registro) {
+      // adiciona chave secreta para passar no Worker
+      registro.secret = SECRET;
+
       fetch(API_URL, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
@@ -416,7 +458,7 @@
       driversDB.push(novo);
       atualizarHistorico();
 
-      // salva na planilha via API
+      // salva na planilha via API (com secret)
       salvarRegistroRemoto(novo);
 
       [
@@ -445,9 +487,6 @@
   </script>
 </body>
 </html>
-
-
-
 
 
 
