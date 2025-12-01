@@ -201,10 +201,39 @@
         <option>HUB-LMG-13</option>
       </select>
 
+      <!-- IMPACTO -->
       <input id="newImpacto" type="text" placeholder="Impacto no DS HUB (ex.: 0,99% DS)" />
-      <input id="newComentarios" type="text" placeholder="Comentários (ex.: Sem retorno, comportamental)" />
-      <input id="newObservacao" type="text" placeholder="Observação (ex.: alinhado com Fleet, combinado retorno em 2 dias)" />
-      <input id="newStatus" type="text" placeholder="Status Governança (ex.: Em acompanhamento / Encerrado / Escalado)" />
+
+      <!-- COMENTÁRIOS (MENU SUSPENSO NOVO) -->
+      <select id="newComentarios">
+        <option value="">Comentários</option>
+        <option value="Comportamental">Comportamental</option>
+        <option value="Sem Retorno">Sem Retorno</option>
+
+        <optgroup label="Área de Especiais">
+          <option value="Rural">Rural</option>
+          <option value="Difícil Acesso">Difícil Acesso</option>
+          <option value="Risco">Risco</option>
+        </optgroup>
+      </select>
+
+      <!-- OBSERVAÇÃO (MENU SUSPENSO NOVO) -->
+      <select id="newObservacao">
+        <option value="">Observação</option>
+        <option value="Driver frequente positivo">Driver frequente positivo</option>
+        <option value="Driver frequente negativo">Driver frequente negativo</option>
+        <option value="Driver sem experiencia na região">Driver sem experiência na região</option>
+        <option value="Driver iniciante">Driver iniciante</option>
+      </select>
+
+      <!-- STATUS (MENU SUSPENSO NOVO) -->
+      <select id="newStatus">
+        <option value="">Status Governança</option>
+        <option value="Em acompanhamento">Em acompanhamento</option>
+        <option value="Finalizado">Finalizado</option>
+        <option value="Reincidente">Reincidente</option>
+      </select>
+
       <input id="newResponsavel" type="text" placeholder="Responsável por adicionar as informações (ex.: Henrique Carvalho)" />
 
       <select id="newNotificacao">
@@ -300,7 +329,7 @@
     });
 
     // =========================
-    // INTEGRAÇÃO COM API (Worker → Apps Script → Sheets)
+    // API: LOAD SHEETS
     // =========================
     function carregarHistoricoRemoto() {
       fetch(API_URL)
@@ -316,7 +345,6 @@
     }
 
     function salvarRegistroRemoto(registro) {
-      // adiciona chave secreta para passar no Worker
       registro.secret = SECRET;
 
       fetch(API_URL, {
@@ -334,7 +362,7 @@
     }
 
     // =========================
-    // LÓGICA DA GOVERNANÇA
+    // HISTÓRICO
     // =========================
     function atualizarHistorico() {
       const tbody = document.querySelector("#historicoTable tbody");
@@ -388,6 +416,9 @@
       atualizarVisibilidadeResponsavelPorFiltro(termo);
     }
 
+    // =========================
+    // BUSCA DRIVER
+    // =========================
     function buscarDriver() {
       const termo = document.getElementById("driverId").value.trim().toLowerCase();
       const box = document.getElementById("resultado");
@@ -433,6 +464,9 @@
       `;
     }
 
+    // =========================
+    // ADICIONAR DRIVER
+    // =========================
     function adicionarDriver() {
       const novo = {
         id: document.getElementById("newId").value.trim(),
@@ -458,8 +492,6 @@
 
       driversDB.push(novo);
       atualizarHistorico();
-
-      // salva na planilha via API (com secret)
       salvarRegistroRemoto(novo);
 
       [
@@ -471,6 +503,9 @@
       document.getElementById("msgAdd").innerHTML = "<p style='color:green'>Driver registrado!</p>";
     }
 
+    // =========================
+    // EXPORTAR CSV
+    // =========================
     function exportarCSV() {
       let csv = "data,id,nome,responsavel,monitorT1,monitorT2,hub,impacto,comentarios,observacao,status,notificacao,carregou,treinamento\n";
 
@@ -488,7 +523,3 @@
   </script>
 </body>
 </html>
-
-
-
-
